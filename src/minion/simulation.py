@@ -6,3 +6,7 @@ def say_hi(name="caracol"):
         print("hi", name)
     else:
         print("bye", name)
+
+def count_to_ten():
+    for i in range(1, 11):
+        print(i)
