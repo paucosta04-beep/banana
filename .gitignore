@@ -1,4 +1,7 @@
-data/*
-.venv
 __pycache__/
 *.egg-info/
+.venv
+data/*
+!data/.gitkeep
+!data/raw/.gitkeep
+!data/processed/.gitkeep
