@@ -69,8 +69,3 @@ project/
 ├── main.py
 ├── pyproject.toml
 └── README.md
-## How to Run
-Run the simulation:
-uv run main.py
-Run the notebook:
-Open notebooks/part2.ipynb.
