@@ -6,7 +6,7 @@ from final_project.place import Place
 
 class City:
     """
-    Simulation environment for the housing market.
+    Entorno de simulación de la ciudad.
     """
 
     def __init__(self, size, area_rates):
@@ -16,7 +16,7 @@ class City:
 
     def initialize(self):
         """
-        Create all Place and Host objects and run initial setup.
+        Crea todos los Place y Host y realiza el setup inicial.
         """
         n = self.size
 
@@ -34,15 +34,13 @@ class City:
 
     def approve_bids(self, bids):
         """
-        Sort bids and accept at most:
-        - one property per buyer
-        - one sale per property
+        Ordena las bids por spread y acepta como máximo:
+        - una propiedad por comprador
+        - una venta por propiedad
         """
         if not bids:
             return []
 
-        # ORIGINAL RULE (use "spread") OR MODIFIED RULE (use "bid_price")
-        # For the modified rule, change "spread" to "bid_price".
         df = pd.DataFrame(bids).sort_values("spread", ascending=False)
 
         used_buyers = set()
@@ -62,7 +60,8 @@ class City:
 
     def execute_transactions(self, transactions):
         """
-        Execute approved transactions: move money, assets and update price history.
+        Ejecuta las transacciones aprobadas: mueve dinero, propiedades y
+        actualiza el historial de precios.
         """
         for t in transactions:
             buyer = self.hosts[t["buyer_id"]]
@@ -71,18 +70,22 @@ class City:
 
             amount = t["bid_price"]
 
+            # movimiento de dinero
             buyer.profits -= amount
             seller.profits += amount
 
+            # movimiento de propiedad
             seller.assets.remove(place.place_id)
             buyer.assets.add(place.place_id)
             place.host_id = buyer.host_id
 
+            # registrar nuevo precio de venta
             place.price[self.step] = amount
 
     def clear_market(self):
         """
-        Collect all bids, approve valid ones and execute them.
+        Recoge todas las bids, selecciona las aprobadas y ejecuta
+        las transacciones.
         """
         all_bids = []
         for h in self.hosts:
@@ -96,10 +99,11 @@ class City:
 
     def iterate(self):
         """
-        Advance one month:
-        - update occupancy
-        - update profits
-        - clear the market
+        Avanza un mes:
+        - incrementa el contador de step
+        - actualiza la ocupación de todos los Place
+        - actualiza profits de todos los Host
+        - limpia el mercado (compra-ventas)
         """
         self.step += 1
 

@@ -1,5 +1,5 @@
 [project]
-name = "banana"
+name = "final-project-airbnb"
 version = "0.1.0"
 description = "Mi proyecto de análisis de datos"
 requires-python = ">=3.13"
