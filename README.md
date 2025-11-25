@@ -1,71 +1,73 @@
-Final Project – Airbnb Market Simulation & Data Analysis
+Final Project — Airbnb Market Simulation & Data Analysis
 This project contains two independent but complementary parts:
-Part 1 — A market simulation implemented in Python (City, Hosts, Places).
-Part 2 — A real-data analysis using Barcelona and Madrid Airbnb datasets.
-Both components explore how prices, availability, and host behaviour shape an Airbnb-style housing market.
-## Part 1 — Market Simulation
-We simulate an Airbnb-style housing market on a 10×10 grid.
-Each property (Place), owned by a Host, participates in a monthly cycle where:
-Prices evolve depending on area-level averages
-Places compete for occupancy
-Hosts accumulate profits from occupied properties
-Hosts may reinvest and acquire new properties
-Adjacent properties influence bidding behaviour
-Market-clearing determines which bids succeed
-The simulation includes an optional rule modification to study how small behavioural changes affect market concentration and wealth inequality.
-✔ Graph 1 — Wealth Distribution
-Shows total wealth of all hosts (profits + current property values) after 180 months.
-✔ Graph 2_v0 — Original Rule
-Distribution of the number of assets per host using the unmodified rule.
-✔ Graph 2_v1 — Modified Rule
-We changed the rule by introducing a probabilistic bias toward acquiring additional properties.
-This increases market inequality and results in greater asset concentration, clearly visible in the graph.
-## Part 2 — Data-Driven Analysis
-We use real Airbnb public datasets from InsideAirbnb.
-Datasets used
-1. Barcelona listings
-Source:
-https://data.insideairbnb.com/spain/catalonia/barcelona/latest/data/listings.csv.gz
-Local file: data/bcn_listings.csv
-2. Madrid listings
-Source:
-https://data.insideairbnb.com/spain/madrid/madrid/latest/data/listings.csv.gz
-Local file: data/madrid_listings.csv
-Additional datasets (availability)
-Used to study seasonal patterns:
+
+Part 1 — Market Simulation (Python)
+
+We simulate an Airbnb-style housing market on a 10×10 grid, where each host owns one or more properties ("places").
+Each month, hosts compete in a bidding system to acquire adjacent properties and increase profits.
+
+Components
+City: the grid and global environment
+Hosts: each with profits, bidding rules, and assets
+Places: individual properties with occupancy and price history
+
+Mechanisms Included
+Dynamic occupancy depending on area price averages
+Host profits and reinvestment cycles
+Adjacent-property bidding system
+Market clearing under competition
+Wealth accumulation
+One modified rule to test market sensitivity  
+
+Part 1 — Graphs & Interpretation
+Graph 1 — Wealth Distribution After 180 Months
+Shows total wealth of all hosts (sorted), including:
+cumulative profits
+last recorded price of all owned properties
+Interpretation:
+The market naturally becomes highly unequal: a few hosts concentrate most of the wealth, while the majority remain at lower levels.
+Graph 2 (v0) — Asset Distribution, Original Rule
+Distribution of the number of properties (assets) per host before modifying the bidding rules.
+Interpretation:
+Most hosts own 1–2 assets, only a few own 4–5.
+Inequality exists but is moderate.
+Graph 2 (v1) — Asset Distribution, Modified Rule
+After changing one rule in the bidding system.
+Interpretation:
+The modified rule causes:
+more hosts with zero assets
+more hosts accumulating 3+ assets
+extreme cases with 8–9 assets
+Conclusion:
+The rule amplifies inequality: winners win more; losers drop out of the asset market.
+
+Part 2 — Data Analysis (Barcelona vs Madrid)
+Datasets Used
+InsideAirbnb:
+bcn_listings.csv
+madrid_listings.csv
 bcn_calendar.csv
 madrid_calendar.csv
-Analysis Steps
-Cleaned and normalized price
-Fixed the minimum_nights inconsistency in Madrid
-Focused on Entire home/apt units with 2–6 guests
-Selected relevant neighbourhoods
-Computed price per person
-Compared Barcelona vs. Madrid
-Added seasonal availability analysis using the calendar files
-Graph 3 — Median Price per Person
-A direct visual comparison of Barcelona and Madrid shows:
-Clear and consistent price differences
-Barcelona is more expensive per person across almost all accommodation sizes
-Differences remain even after cleaning and filtering
-Extra Graphs — Calendar Availability
-Using the calendar datasets:
-Monthly mean availability for Barcelona
-Monthly mean availability for Madrid
-A combined comparison figure
-These graphs illustrate seasonal patterns and booking behaviour in both markets.
-## Conclusion
-This project combines:
-A custom-built simulation of host behaviour and market dynamics
-A real-world data analysis of prices and availability
-A comparison of two major Airbnb markets in Spain
-The results show both structural inequalities in simulated markets and clear pricing/seasonality differences in real Airbnb data.
-## Project Structure
-project/
-├── data/
-├── notebooks/
-├── reports/
-├── src/final_project/
-├── main.py
-├── pyproject.toml
-└── README.md
+Focus:
+- Entire home/apt
+- 2–6 guests
+- Price per person
+- Monthly availability
+Part 2 — Graphs & Interpretation
+Graph 3 — Price per Person: Barcelona vs Madrid
+Shows the median price per person for different accommodation sizes.
+Interpretation:
+Barcelona is consistently more expensive for every guest capacity.
+Madrid prices drop sharply as group size increases (more competitive for large groups).
+Barcelona remains more stable and high priced.
+Graph 4 — Average Monthly Availability
+Proportion of available days per month based on calendar.csv.
+Interpretation:
+Barcelona shows a strong seasonal pattern: lower availability during summer → high tourism.
+Madrid is more stable year-round, with fewer extreme fluctuations.
+September–October recover availability in both cities.
+📝 Overall Conclusions
+The simulated market (Part 1) naturally evolves toward inequality, and modifying rules can accelerate or slow this effect.
+Barcelona is a more expensive market per person than Madrid for entire apartments.
+Madrid offers cheaper large-group options.
+Availability trends show that Barcelona is more tourism-driven, while Madrid has more stable demand.
