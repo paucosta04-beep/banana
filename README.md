@@ -66,7 +66,7 @@ Interpretation:
 Barcelona shows a strong seasonal pattern: lower availability during summer → high tourism.
 Madrid is more stable year-round, with fewer extreme fluctuations.
 September–October recover availability in both cities.
-📝 Overall Conclusions
+Overall Conclusions
 The simulated market (Part 1) naturally evolves toward inequality, and modifying rules can accelerate or slow this effect.
 Barcelona is a more expensive market per person than Madrid for entire apartments.
 Madrid offers cheaper large-group options.
