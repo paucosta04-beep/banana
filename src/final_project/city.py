@@ -9,9 +9,10 @@ class City:
     Entorno de simulación de la ciudad.
     """
 
-    def __init__(self, size, area_rates):
+    def __init__(self, size, area_rates, bid_spend_fraction=1.0):
         self.size = size
         self.area_rates = area_rates
+        self.bid_spend_fraction = bid_spend_fraction
         self.step = 0
 
     def initialize(self):
@@ -28,7 +29,12 @@ class City:
             p.setup()
 
         self.hosts = [
-            Host(host_id=x, place=self.places[x], city=self)
+            Host(
+                host_id=x,
+                place=self.places[x],
+                city=self,
+                bid_spend_fraction=self.bid_spend_fraction,
+            )
             for x in range(n * n)
         ]
 
@@ -52,7 +58,13 @@ class City:
             pid = row["place_id"]
 
             if buyer not in used_buyers and pid not in used_places:
-                approved.append(row.to_dict())
+                approved.append({
+                    "place_id": int(pid),
+                    "seller_id": int(row["seller_id"]),
+                    "buyer_id": int(buyer),
+                    "spread": float(row["spread"]),
+                    "bid_price": float(row["bid_price"]),
+                })
                 used_buyers.add(buyer)
                 used_places.add(pid)
 

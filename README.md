@@ -71,3 +71,9 @@ The simulated market (Part 1) naturally evolves toward inequality, and modifying
 Barcelona is a more expensive market per person than Madrid for entire apartments.
 Madrid offers cheaper large-group options.
 Availability trends show that Barcelona is more tourism-driven, while Madrid has more stable demand.
+
+Datasets (Inside Airbnb downloads)
+- Barcelona listings (June 2025): https://data.insideairbnb.com/spain/catalonia/barcelona/2025-06-26/data/listings.csv.gz
+- Barcelona calendar (June 2025): https://data.insideairbnb.com/spain/catalonia/barcelona/2025-06-26/data/calendar.csv.gz
+- Madrid listings (June 2025): https://data.insideairbnb.com/spain/community-of-madrid/madrid/2025-06-27/data/listings.csv.gz
+- Madrid calendar (June 2025): https://data.insideairbnb.com/spain/community-of-madrid/madrid/2025-06-27/data/calendar.csv.gz

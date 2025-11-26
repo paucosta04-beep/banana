@@ -3,12 +3,13 @@ class Host:
     Representa un propietario de uno o más anuncios.
     """
 
-    def __init__(self, host_id, place, city, profits=0):
+    def __init__(self, host_id, place, city, profits=0, bid_spend_fraction=1.0):
         self.host_id = host_id
         self.city = city
         self.profits = profits
         self.area = place.area           # área de origen
         self.assets = set([place.place_id])  # IDs de propiedades que posee
+        self.bid_spend_fraction = bid_spend_fraction
 
     def update_profits(self):
         """
@@ -47,14 +48,27 @@ class Host:
             last_step = max(place.price.keys())
             ask_price = place.price[last_step]
 
-            if self.profits >= ask_price:
-                spread = self.profits - ask_price
+            # regla original: usar todos los profits como oferta
+            # if self.profits >= ask_price:
+            #     spread = self.profits - ask_price
+            #     bids.append({
+            #         "place_id": pid,
+            #         "seller_id": place.host_id,
+            #         "buyer_id": self.host_id,
+            #         "spread": spread,
+            #         "bid_price": self.profits,
+            #     })
+
+            # regla modificada: solo usa una fracción (bid_spend_fraction)
+            budget = self.profits * self.bid_spend_fraction
+            if budget >= ask_price:
+                spread = budget - ask_price
                 bids.append({
                     "place_id": pid,
                     "seller_id": place.host_id,
                     "buyer_id": self.host_id,
                     "spread": spread,
-                    "bid_price": self.profits,
+                    "bid_price": budget,
                 })
 
         return bids

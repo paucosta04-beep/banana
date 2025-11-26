@@ -1,7 +1,13 @@
 # main.py
+import os
+import sys
 import random
 import numpy as np
 import matplotlib.pyplot as plt
+
+# permitir import del paquete desde src/ sin instalar
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+sys.path.append(os.path.join(BASE_DIR, "src"))
 
 from final_project.city import City
 
@@ -17,9 +23,12 @@ area_rates = {
 }
 
 
-def run_simulation(n_steps=180):
+def run_simulation(n_steps=180, bid_spend_fraction=1.0, seed=123):
     """Ejecuta la simulación durante n_steps meses."""
-    city = City(size=10, area_rates=area_rates)
+    random.seed(seed)
+    np.random.seed(seed)
+
+    city = City(size=10, area_rates=area_rates, bid_spend_fraction=bid_spend_fraction)
     city.initialize()
     for _ in range(n_steps):
         city.iterate()
@@ -44,7 +53,8 @@ def compute_wealth(city):
 
 
 if __name__ == "__main__":
-    city = run_simulation()
+    # versión original (usa todos los profits para pujar)
+    city = run_simulation(bid_spend_fraction=1.0, seed=123)
     wealth = compute_wealth(city)
 
     # ordenar de menor a mayor riqueza
@@ -57,8 +67,34 @@ if __name__ == "__main__":
 
     plt.figure(figsize=(10, 5))
     plt.bar(range(len(values)), values, color=bar_colors)
-    plt.xlabel("Hosts (ordenados por riqueza)")
-    plt.ylabel("Riqueza total")
-    plt.title("Distribución de riqueza de los hosts tras 180 meses")
+    plt.xlabel("Hosts (sorted by wealth)")
+    plt.ylabel("Total wealth")
+    plt.title("Host wealth after 180 months")
     plt.tight_layout()
     plt.savefig("reports/graph1.png")
+    plt.close()
+
+    # Gráfico adicional: distribución de activos con regla original
+    asset_counts_v0 = [len(h.assets) for h in city.hosts]
+    max_assets = max(asset_counts_v0)
+    plt.figure(figsize=(8, 4))
+    plt.hist(asset_counts_v0, bins=range(0, max_assets + 2), edgecolor="black")
+    plt.xlabel("Properties per host")
+    plt.ylabel("Number of hosts")
+    plt.title("Asset distribution (original rule)")
+    plt.tight_layout()
+    plt.savefig("reports/graph2_v0.png")
+    plt.close()
+
+    # Versión modificada: cada host solo gasta la mitad de sus profits en una puja
+    city_v1 = run_simulation(bid_spend_fraction=0.5, seed=123)
+    asset_counts_v1 = [len(h.assets) for h in city_v1.hosts]
+    max_assets_v1 = max(asset_counts_v1)
+    plt.figure(figsize=(8, 4))
+    plt.hist(asset_counts_v1, bins=range(0, max_assets_v1 + 2), edgecolor="black")
+    plt.xlabel("Properties per host")
+    plt.ylabel("Number of hosts")
+    plt.title("Asset distribution (modified: 50% of cash)")
+    plt.tight_layout()
+    plt.savefig("reports/graph2_v1.png")
+    plt.close()
