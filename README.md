@@ -79,18 +79,20 @@ Datasets (Inside Airbnb downloads)
 - Madrid calendar (June 2025): https://data.insideairbnb.com/spain/community-of-madrid/madrid/2025-06-27/data/calendar.csv.gz
 
 Rule change snippet (Part 1)
-- Original (commented in `src/final_project/hosts.py`): each host bids using 100% of its profits.
-- Modified (active): each host only uses a fraction of its profits (here 50%) → bids are smaller, fewer quick takeovers.
+- Original (commented in `src/final_project/hosts.py`): each host bids using 100% of its profits on any adjacent listing.
+- Modified (active in graph2_v1): host only bids if the target listing’s nightly rate is at or below the area’s average rate (buys “cheap” neighbors).
 ```python
 # original rule
 # if self.profits >= ask_price:
 #     spread = self.profits - ask_price
 #     bids.append({... "bid_price": self.profits})
 
-# modified rule (active)
-budget = self.profits * self.bid_spend_fraction  # e.g., 0.5
+# modified rule (active in v1)
+if place.rate > area_mean_rate:
+    continue  # skip expensive neighbor
+budget = self.profits * self.bid_spend_fraction  # here 1.0
 if budget >= ask_price:
     spread = budget - ask_price
     bids.append({... "bid_price": budget})
 ```
-Effect we expected: limiting cash per bid slows aggressive expansion and should reduce extreme concentration. Graphs `reports/graph2_v0.png` (original) vs `graph2_v1.png` (modified) show the distribution of properties per host under each rule.
+Effect we expected: forcing hosts to buy only “below-average” listings should let more owners acquire something, reducing concentration. Graphs `reports/graph2_v0.png` (original) vs `graph2_v1.png` (modified) show the assets-per-host distribution.

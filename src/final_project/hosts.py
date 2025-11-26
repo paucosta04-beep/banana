@@ -3,13 +3,22 @@ class Host:
     Representa un propietario de uno o más anuncios.
     """
 
-    def __init__(self, host_id, place, city, profits=0, bid_spend_fraction=1.0):
+    def __init__(
+        self,
+        host_id,
+        place,
+        city,
+        profits=0,
+        bid_spend_fraction=1.0,
+        cheap_only=False,
+    ):
         self.host_id = host_id
         self.city = city
         self.profits = profits
         self.area = place.area           # área de origen
         self.assets = set([place.place_id])  # IDs de propiedades que posee
         self.bid_spend_fraction = bid_spend_fraction
+        self.cheap_only = cheap_only
 
     def update_profits(self):
         """
@@ -47,6 +56,13 @@ class Host:
             # precio de venta actual = último valor del historial
             last_step = max(place.price.keys())
             ask_price = place.price[last_step]
+
+            # regla opcional: solo comprar si el rate del sitio está por debajo
+            # de la media del área (compras prudentes/baratas)
+            if self.cheap_only:
+                area_mean_rate = self.city.area_mean_rates[place.area]
+                if place.rate > area_mean_rate:
+                    continue
 
             # regla original: usar todos los profits como oferta
             # if self.profits >= ask_price:

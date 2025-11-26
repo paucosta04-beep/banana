@@ -9,11 +9,16 @@ class City:
     Entorno de simulación de la ciudad.
     """
 
-    def __init__(self, size, area_rates, bid_spend_fraction=1.0):
+    def __init__(self, size, area_rates, bid_spend_fraction=1.0, cheap_only=False):
         self.size = size
         self.area_rates = area_rates
         self.bid_spend_fraction = bid_spend_fraction
+        self.cheap_only = cheap_only
         self.step = 0
+        # media de rate por área (constante durante la simulación)
+        self.area_mean_rates = {
+            k: (low + high) / 2 for k, (low, high) in self.area_rates.items()
+        }
 
     def initialize(self):
         """
@@ -34,6 +39,7 @@ class City:
                 place=self.places[x],
                 city=self,
                 bid_spend_fraction=self.bid_spend_fraction,
+                cheap_only=self.cheap_only,
             )
             for x in range(n * n)
         ]

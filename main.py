@@ -23,12 +23,17 @@ area_rates = {
 }
 
 
-def run_simulation(n_steps=180, bid_spend_fraction=1.0, seed=123):
+def run_simulation(n_steps=180, bid_spend_fraction=1.0, cheap_only=False, seed=123):
     """Ejecuta la simulación durante n_steps meses."""
     random.seed(seed)
     np.random.seed(seed)
 
-    city = City(size=10, area_rates=area_rates, bid_spend_fraction=bid_spend_fraction)
+    city = City(
+        size=10,
+        area_rates=area_rates,
+        bid_spend_fraction=bid_spend_fraction,
+        cheap_only=cheap_only,
+    )
     city.initialize()
     for _ in range(n_steps):
         city.iterate()
@@ -53,8 +58,8 @@ def compute_wealth(city):
 
 
 if __name__ == "__main__":
-    # versión original (usa todos los profits para pujar)
-    city = run_simulation(bid_spend_fraction=1.0, seed=123)
+    # versión original: puja con 100% del cash, sin filtro de “propiedad barata”
+    city = run_simulation(bid_spend_fraction=1.0, cheap_only=False, seed=123)
     wealth = compute_wealth(city)
 
     # ordenar de menor a mayor riqueza
@@ -81,22 +86,36 @@ if __name__ == "__main__":
     plt.hist(asset_counts_v0, bins=range(0, max_assets + 2), edgecolor="black")
     plt.xlabel("Properties per host")
     plt.ylabel("Number of hosts")
-    plt.title("Asset distribution (original rule: spend 100% of cash)")
-    plt.figtext(0.99, 0.01, "Rule: bids use all profits", ha="right", va="bottom", fontsize=8)
+    plt.title("Asset distribution (original: spend 100%, any neighbor)")
+    plt.figtext(
+        0.99,
+        0.01,
+        "Rule: bids use all profits, no price filter",
+        ha="right",
+        va="bottom",
+        fontsize=8,
+    )
     plt.tight_layout()
     plt.savefig("reports/graph2_v0.png")
     plt.close()
 
-    # Versión modificada: cada host solo gasta la mitad de sus profits en una puja
-    city_v1 = run_simulation(bid_spend_fraction=0.5, seed=123)
+    # Versión modificada: solo compra si el rate del vecino <= media del área
+    city_v1 = run_simulation(bid_spend_fraction=1.0, cheap_only=True, seed=123)
     asset_counts_v1 = [len(h.assets) for h in city_v1.hosts]
     max_assets_v1 = max(asset_counts_v1)
     plt.figure(figsize=(8, 4))
     plt.hist(asset_counts_v1, bins=range(0, max_assets_v1 + 2), edgecolor="black")
     plt.xlabel("Properties per host")
     plt.ylabel("Number of hosts")
-    plt.title("Asset distribution (modified rule: spend 50% of cash)")
-    plt.figtext(0.99, 0.01, "Rule: bids use 50% of profits", ha="right", va="bottom", fontsize=8)
+    plt.title("Asset distribution (modified: buy only below area-average rate)")
+    plt.figtext(
+        0.99,
+        0.01,
+        "Rule: only bid if place rate <= area average",
+        ha="right",
+        va="bottom",
+        fontsize=8,
+    )
     plt.tight_layout()
     plt.savefig("reports/graph2_v1.png")
     plt.close()
