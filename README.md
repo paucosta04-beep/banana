@@ -35,11 +35,11 @@ Graph 2 (v1) — Asset Distribution, Modified Rule
 After changing one rule in the bidding system.
 Interpretation:
 The modified rule causes:
-more hosts with zero assets
-more hosts accumulating 3+ assets
-extreme cases with 8–9 assets
+fewer hosts stuck at zero assets
+more hosts reaching 1–2 assets
+the tail of 3+ assets nearly disappears
 Conclusion:
-The rule amplifies inequality: winners win more; losers drop out of the asset market.
+The price filter reduces concentration relative to the original rule.
 
 Part 2 — Data Analysis (Barcelona vs Madrid)
 Datasets Used
@@ -95,4 +95,4 @@ if budget >= ask_price:
     spread = budget - ask_price
     bids.append({... "bid_price": budget})
 ```
-Effect we expected: forcing hosts to buy only “below-average” listings should let more owners acquire something, reducing concentration. Graphs `reports/graph2_v0.png` (original) vs `graph2_v1.png` (modified) show the assets-per-host distribution.
+Effect observed: con el filtro de “no comprar caro” bajan los hosts en 0 activos y suben los que tienen 1–2; la cola de 3+ casi desaparece. Graphs `reports/graph2_v0.png` (original) vs `graph2_v1.png` (modified) muestran la distribución de activos por host bajo ambas reglas.
