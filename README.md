@@ -95,4 +95,4 @@ if budget >= ask_price:
     spread = budget - ask_price
     bids.append({... "bid_price": budget})
 ```
-Effect observed: con el filtro de “no comprar caro” bajan los hosts en 0 activos y suben los que tienen 1–2; la cola de 3+ casi desaparece. Graphs `reports/graph2_v0.png` (original) vs `graph2_v1.png` (modified) muestran la distribución de activos por host bajo ambas reglas.
+Effect observed: with the “don’t buy expensive neighbors” filter, fewer hosts stay at 0 assets, more hosts reach 1–2 assets, and the 3+ tail nearly disappears. Graphs `reports/graph2_v0.png` (original) vs `graph2_v1.png` (modified) show the assets-per-host distribution under both rules.
