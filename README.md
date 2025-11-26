@@ -77,3 +77,20 @@ Datasets (Inside Airbnb downloads)
 - Barcelona calendar (June 2025): https://data.insideairbnb.com/spain/catalonia/barcelona/2025-06-26/data/calendar.csv.gz
 - Madrid listings (June 2025): https://data.insideairbnb.com/spain/community-of-madrid/madrid/2025-06-27/data/listings.csv.gz
 - Madrid calendar (June 2025): https://data.insideairbnb.com/spain/community-of-madrid/madrid/2025-06-27/data/calendar.csv.gz
+
+Rule change snippet (Part 1)
+- Original (commented in `src/final_project/hosts.py`): each host bids using 100% of its profits.
+- Modified (active): each host only uses a fraction of its profits (here 50%) → bids are smaller, fewer quick takeovers.
+```python
+# original rule
+# if self.profits >= ask_price:
+#     spread = self.profits - ask_price
+#     bids.append({... "bid_price": self.profits})
+
+# modified rule (active)
+budget = self.profits * self.bid_spend_fraction  # e.g., 0.5
+if budget >= ask_price:
+    spread = budget - ask_price
+    bids.append({... "bid_price": budget})
+```
+Effect we expected: limiting cash per bid slows aggressive expansion and should reduce extreme concentration. Graphs `reports/graph2_v0.png` (original) vs `graph2_v1.png` (modified) show the distribution of properties per host under each rule.
