@@ -86,6 +86,7 @@ if __name__ == "__main__":
     plt.hist(asset_counts_v0, bins=range(0, max_assets + 2), edgecolor="black")
     plt.xlabel("Properties per host")
     plt.ylabel("Number of hosts")
+    plt.ylim(0, 55)  # same y-axis across versions
     plt.title("Asset distribution (original: spend 100%, any neighbor)")
     plt.figtext(
         0.99,
@@ -107,6 +108,7 @@ if __name__ == "__main__":
     plt.hist(asset_counts_v1, bins=range(0, max_assets_v1 + 2), edgecolor="black")
     plt.xlabel("Properties per host")
     plt.ylabel("Number of hosts")
+    plt.ylim(0, 55)  # same y-axis across versions
     plt.title("Asset distribution (modified: buy only below area-average rate)")
     plt.figtext(
         0.99,
