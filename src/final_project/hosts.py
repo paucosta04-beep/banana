@@ -64,6 +64,11 @@ class Host:
                 if place.rate > area_mean_rate:
                     continue
 
+                # filtro adicional: evitar ask muy altos respecto al valor base de la zona
+                baseline_price = 900 * place.rate
+                if ask_price > 1.2 * baseline_price:
+                    continue
+
             # regla original: usar todos los profits como oferta
             # if self.profits >= ask_price:
             #     spread = self.profits - ask_price
